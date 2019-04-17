@@ -10,3 +10,14 @@ db = firestore.client()
 docs = db.collection('messages').where('name', '==', "aaaa").get()
 for doc in docs:
     print(doc.to_dict()['text'])
+
+print("================")
+db.collection('messages').add({
+    'name': 'aaaa',
+    'text': 'oaaaa'
+})
+
+docs = db.collection('messages').where('name', '==', "aaaa").get()
+for doc in docs:
+    print(doc.to_dict()['text'])
+
