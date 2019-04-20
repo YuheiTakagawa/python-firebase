@@ -19,7 +19,7 @@ try:
             print("14")
             db.collection('messages').add({
                 'name': u'RPI',
-                'test': u'14',
+                'text': u'14',
                 'timestamp': firestore.SERVER_TIMESTAMP
             })
 
