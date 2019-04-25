@@ -12,20 +12,29 @@ def gpio_setup():
     GPIO.setup(input_list, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.setup(output_list, GPIO.OUT)
 
+def switch_callback(gpio_pin):
+    print("14")
+    db.collection('messages').add({
+        'name': u'RPI',
+        'text': u'14',
+        'timestamp': firestore.SERVER_TIMESTAMP
+    })
+
+
+#pin, inout, event
+a = [
+    {"pin":14, "io":GPIO.IN, "func":switch_callback},
+]
+
+GPIO.add_event_detect(14, GPIO.FALLING, bouncetime=100)
+GPIO.add_event_callback(a[0]["pin"], a[0]["func"]) 
 
 gpio_setup()
 db = fs_init.firestore_init()
 
 try:
     while True:
-        if GPIO.input(14) == GPIO.HIGH:
-            print("14")
-            db.collection('messages').add({
-                'name': u'RPI',
-                'text': u'14',
-                'timestamp': firestore.SERVER_TIMESTAMP
-            })
-        time.sleep(0.2)
+        time.sleep(0.1)
 
 except KeyboardInterrupt:
     pass
