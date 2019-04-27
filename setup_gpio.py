@@ -1,3 +1,4 @@
+import RPi.GPIO as GPIO
 
 def callback():
     print("Hello")
@@ -8,7 +9,7 @@ a = [
     {"pin":15, "io":GPIO.OUT, "pull_up":GPIO.PUD_DOWN}
 ]
 
-def gpio_setup():
+def setup():
     GPIO.setmode(GPIO.BCM)
     for item range a:
         GPIO.setup(item["pin"], item["io"], item["pull_up"])
