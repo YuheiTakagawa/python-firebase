@@ -1,5 +1,3 @@
-import firebase_admin
-from firebase_admin import firestore
 import fs_init
 
 db = fs_init.firestore_init()

@@ -8,3 +8,5 @@ def firestore_init():
     firebase_admin.initialize_app(cred)
     return firestore.client()
 
+def get_firestore_time():
+    return firestore.SERVER_TIMESTAMP
