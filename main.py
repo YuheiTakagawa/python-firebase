@@ -8,13 +8,14 @@ def switch_callback(gpio_pin):
     db.collection('messages').add({
         'name': u'RPI',
         'text': u'14',
-        'timestamp': firestore.SERVER_TIMESTAMP
+        'timestamp': fs.get_firestore_time()
     })
 
 
 #pin, io, func, event
 a = [
-    {"pin":14, "io":GPIO.IN, "func":switch_callback, "event": GPIO.FALLING},
+#    {"pin":21, "io":GPIO.IN, "func":switch_callback, "event": GPIO.FALLING},
+{"pin":21, "io":GPIO.IN, "pull_up": GPIO.PUD_DOWN, "func":switch_callback, "event": GPIO.RISING},
 ]
 
 setup_gpio.setup(a)
