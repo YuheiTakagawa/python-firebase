@@ -20,6 +20,9 @@ FIREBASE_AUTH_KEY=<path to your key>
 ```shell
 pip install firebase-admin
 pip install google-cloud-firestore
+
+# For GPS
+pip install git+https://github.com/bsdz/micropyGPS.git
 ```
 
 ## 対応ずみのセンサ達
@@ -48,3 +51,9 @@ Would you like the SPI kernel module to be loaded by default? にて Yes
 SPI kernel module will now be loaded by default にて Ok
 Finishを選択
 ```
+
+### 衝突検出センサ(赤外線)について
+ML393 IRというセンサを使います。  
+可変抵抗がついていてこれを回すこと(要プラスドライバー)で距離を変更できます。  
+今の所、1cm~6cmは確認できてますがそれ以上の抵抗になると常に検出中になってしまう。  
+検出した場合、GPIO.LOWになります。
