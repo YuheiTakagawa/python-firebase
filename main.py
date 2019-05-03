@@ -1,16 +1,7 @@
-# import firebase_admin
-from firebase_admin import firestore
 import RPi.GPIO as GPIO
 import time
-import fs_init
-
-input_list = [14]
-output_list = []
-
-def gpio_setup():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(input_list, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.setup(output_list, GPIO.OUT)
+import fs
+import setup_gpio
 
 def switch_callback(gpio_pin):
     print("14")
@@ -21,16 +12,14 @@ def switch_callback(gpio_pin):
     })
 
 
-#pin, inout, event
+#pin, io, func, event
 a = [
-    {"pin":14, "io":GPIO.IN, "func":switch_callback},
+    {"pin":14, "io":GPIO.IN, "func":switch_callback, "event": GPIO.FALLING},
 ]
 
-GPIO.add_event_detect(14, GPIO.FALLING, bouncetime=100)
-GPIO.add_event_callback(a[0]["pin"], a[0]["func"]) 
+setup_gpio.setup(a)
 
-gpio_setup()
-db = fs_init.firestore_init()
+db = fs.firestore_init()
 
 try:
     while True:
