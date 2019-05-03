@@ -9,11 +9,14 @@ a = [
     {"pin":15, "io":GPIO.OUT, "pull_up":GPIO.PUD_DOWN}
 ]
 
-def setup():
+def setup(ab):
     GPIO.setmode(GPIO.BCM)
-    for item range a:
-        GPIO.setup(item["pin"], item["io"], item["pull_up"])
-        if item in "event" && item in "func"
+    for item in ab:
+        if "pull_up" in item:
+            GPIO.setup(item["pin"], item["io"], item["pull_up"])
+        else:
+            GPIO.setup(item["pin"], item["io"])
+        if "event" in item and "func" in item:
             GPIO.add_event_detect(item["pin"], item["event"], bouncetime=100)
             GPIO.add_event_callback(item["pin"], item["func"])
 
