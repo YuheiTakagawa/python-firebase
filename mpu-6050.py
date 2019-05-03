@@ -18,21 +18,21 @@ class MPU6050:
 	PWR_MGMT_2 = 0x6c
 
 	def __init__(self):
-		bus = smbus.SMBus(1)
-		bus.write_byte_data(DEV_ADDR, PWR_MGMT_1, 0)
+		self.bus = smbus.SMBus(1)
+		self.bus.write_byte_data(MPU6050.DEV_ADDR, MPU6050.PWR_MGMT_1, 0)
 
 
 	def read_byte(self, adr):
-		return bus.read_byte_data(DEV_ADDR, adr)
+		return self.bus.read_byte_data(MPU6050.DEV_ADDR, adr)
 
 	def __read_word(self, adr):
-		high = bus.read_byte_data(DEV_ADDR, adr)
-		low = bus.read_byte_data(DEV_ADDR, adr+1)
+		high = self.bus.read_byte_data(MPU6050.DEV_ADDR, adr)
+		low = self.bus.read_byte_data(MPU6050.DEV_ADDR, adr+1)
 		val = (high << 8) + low
 		return val
 
 	def __read_word_sensor(self, adr):
-		val = __read_word(adr)
+		val = self.__read_word(adr)
 		if (val >= 0x8000):
 			return -((65535 -val) + 1)
 		else:
@@ -40,19 +40,19 @@ class MPU6050:
 
 
 	def get_temp(self):
-		temp = __read_word_sensor(TEMP_OUT)
+		temp = self.__read_word_sensor(MPU6050.TEMP_OUT)
 		x = temp / 340 + 36.53
 		return x
 
 
 	def get_gyro_data_lsb(self):
-		x = __read_word_sensor(GYRO_XOUT)
-		y = __read_word_sensor(GYRO_YOUT)
-		z = __read_word_sensor(GYRO_ZOUT)
+		x = self.__read_word_sensor(MPU6050.GYRO_XOUT)
+		y = self.__read_word_sensor(MPU6050.GYRO_YOUT)
+		z = self.__read_word_sensor(MPU6050.GYRO_ZOUT)
 		return [x, y, z]
 
 	def get_gyro_data_deg(self):
-		x,y,z = get_gyro_data_lsb()
+		x,y,z = self.get_gyro_data_lsb()
 		x = x / 131.0
 		y = y / 131.0
 		z = z / 131.0
@@ -60,13 +60,13 @@ class MPU6050:
 
 
 	def get_accel_data_lsb(self):
-		x = __read_word_sensor(ACCEL_XOUT)
-		y = __read_word_sensor(ACCEL_YOUT)
-		z = __read_word_sensor(ACCEL_ZOUT)
+		x = self.__read_word_sensor(MPU6050.ACCEL_XOUT)
+		y = self.__read_word_sensor(MPU6050.ACCEL_YOUT)
+		z = self.__read_word_sensor(MPU6050.ACCEL_ZOUT)
 		return [x, y, z]
 
 	def get_accel_data_g(self):
-		x,y,z = get_accel_data_lsb()
+		x,y,z = self.get_accel_data_lsb()
 		x = x / 16384.0
 		y = y / 16384.0
 		z = z / 16384.0
