@@ -12,12 +12,12 @@ class GPS:
             self.gps.update(x)
     
     def read(self):
-        rungps()
+        self.rungps()
         return (self.gps.latitude[0], self.gps.longitude[0])
 
 
 gps = GPS()
 while True:
     result = gps.read()
-    print(str(result)
+    print(str(result))
     time.sleep(1)
