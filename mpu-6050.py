@@ -18,21 +18,22 @@ class MPU6050:
 	PWR_MGMT_2 = 0x6c
 
 	def __init__(self):
-		bus = smbus.SMBus(1)
-		bus.write_byte_data(DEV_ADDR, PWR_MGMT_1, 0)
+		self.bus = smbus.SMBus(1)
+		self.bus.write_byte_data(MPU6050.DEV_ADDR, MPU6050.PWR_MGMT_1, 0)
+#               self.bus.write_byte_data(MPU6050.DEV_ADDR, 0x1a, 5)
 
 
 	def read_byte(self, adr):
-		return bus.read_byte_data(DEV_ADDR, adr)
+		return self.bus.read_byte_data(MPU6050.DEV_ADDR, adr)
 
 	def __read_word(self, adr):
-		high = bus.read_byte_data(DEV_ADDR, adr)
-		low = bus.read_byte_data(DEV_ADDR, adr+1)
+		high = self.bus.read_byte_data(MPU6050.DEV_ADDR, adr)
+		low = self.bus.read_byte_data(MPU6050.DEV_ADDR, adr+1)
 		val = (high << 8) + low
 		return val
 
 	def __read_word_sensor(self, adr):
-		val = __read_word(adr)
+		val = self.__read_word(adr)
 		if (val >= 0x8000):
 			return -((65535 -val) + 1)
 		else:
@@ -40,19 +41,19 @@ class MPU6050:
 
 
 	def get_temp(self):
-		temp = __read_word_sensor(TEMP_OUT)
+		temp = self.__read_word_sensor(MPU6050.TEMP_OUT)
 		x = temp / 340 + 36.53
 		return x
 
 
 	def get_gyro_data_lsb(self):
-		x = __read_word_sensor(GYRO_XOUT)
-		y = __read_word_sensor(GYRO_YOUT)
-		z = __read_word_sensor(GYRO_ZOUT)
+		x = self.__read_word_sensor(MPU6050.GYRO_XOUT)
+		y = self.__read_word_sensor(MPU6050.GYRO_YOUT)
+		z = self.__read_word_sensor(MPU6050.GYRO_ZOUT)
 		return [x, y, z]
 
 	def get_gyro_data_deg(self):
-		x,y,z = get_gyro_data_lsb()
+		x,y,z = self.get_gyro_data_lsb()
 		x = x / 131.0
 		y = y / 131.0
 		z = z / 131.0
@@ -60,13 +61,13 @@ class MPU6050:
 
 
 	def get_accel_data_lsb(self):
-		x = __read_word_sensor(ACCEL_XOUT)
-		y = __read_word_sensor(ACCEL_YOUT)
-		z = __read_word_sensor(ACCEL_ZOUT)
+		x = self.__read_word_sensor(MPU6050.ACCEL_XOUT)
+		y = self.__read_word_sensor(MPU6050.ACCEL_YOUT)
+		z = self.__read_word_sensor(MPU6050.ACCEL_ZOUT)
 		return [x, y, z]
 
 	def get_accel_data_g(self):
-		x,y,z = get_accel_data_lsb()
+		x,y,z = self.get_accel_data_lsb()
 		x = x / 16384.0
 		y = y / 16384.0
 		z = z / 16384.0
@@ -110,6 +111,17 @@ class MPU6050:
 		deg_phi = math.degrees(phi)
 		return [deg_theta, deg_psi, deg_phi]
 
+        def calc_angle(self, x, y, z):
+                ang_x = math.atan2(x, z) * 360 / 2.0 / math.pi
+                ang_y = math.atan2(y, z) * 360 / 2.0 / math.pi
+                ang_z = math.atan2(x, y) * 360 / 2.0 / math.pi
+                return [ang_x, ang_y, ang_z]
+
+        def calc_ro_speed(self, x, y, z):
+                ro_x = x / 100.0
+                ro_y = y / 100.0
+                ro_z = z / 100.0
+                return [ro_x, ro_y, ro_z]
 
 while True:
 #	temp = get_temp()
@@ -131,25 +143,34 @@ while True:
 #	print
 #
 #	sleep(1)
-	mpu = MPU6050()
-	accel_x1,accel_y1,accel_z1 = mpu.get_accel_data_g()
-	slope_x1,slope_y1,slope_z1 = mpu.calc_slope_for_accel_1axis(accel_x1,accel_y1, accel_z1)
-	slope_x1 = math.degrees(slope_x1)
-	slope_y1 = math.degrees(slope_y1)
-	slope_z1 = math.degrees(slope_z1)
-	print 'katamuki[sita]',
-	print 'x: %06.3f' % slope_x1,
-	print 'y: %06.3f' % slope_y1,
-	print 'z: %06.3f' % slope_z1,
-	accel_x2,accel_y2,accel_z2 = mpu.get_accel_data_g()
-	slope_xy = mpu.calc_slope_for_accel_2axis_deg(accel_x2, accel_y2, accel_z2)
-	print 'katamuki[sita]',
-	print 'xy: %06.3f' % slope_xy,
-	accel_x3, accel_y3, accel_z3 = mpu.get_accel_data_g()
-	theta,psi,phi = mpu.calc_slope_for_accel_3axis_deg(accel_x3, accel_y3, accel_z3)
-	print 'sita=%06.3f' % theta,
-	print 'psi =%06.3f' % psi,
-	print 'phi =%06.3f' % phi,
-	print
+#	mpu = MPU6050()
+#	accel_x1,accel_y1,accel_z1 = mpu.get_accel_data_g()
+#	slope_x1,slope_y1,slope_z1 = mpu.calc_slope_for_accel_1axis(accel_x1,accel_y1, accel_z1)
+#	slope_x1 = math.degrees(slope_x1)
+#	slope_y1 = math.degrees(slope_y1)
+#	slope_z1 = math.degrees(slope_z1)
+#	print 'katamuki[sita]',
+#	print 'x: %06.3f' % slope_x1,
+#	print 'y: %06.3f' % slope_y1,
+#	print 'z: %06.3f' % slope_z1,
+#	accel_x2,accel_y2,accel_z2 = mpu.get_accel_data_g()
+#	slope_xy = mpu.calc_slope_for_accel_2axis_deg(accel_x2, accel_y2, accel_z2)
+#	print 'katamuki[sita]',
+#	print 'xy: %06.3f' % slope_xy,
+#	accel_x3, accel_y3, accel_z3 = mpu.get_accel_data_g()
+#	theta,psi,phi = mpu.calc_slope_for_accel_3axis_deg(accel_x3, accel_y3, accel_z3)
+#	print 'sita=%06.3f' % theta,
+#	print 'psi =%06.3f' % psi,
+#	print 'phi =%06.3f' % phi,
+#	print
 	
+        mpu = MPU6050()
+        acc_x, acc_y, acc_z = mpu.get_accel_data_g()
+        print '%06.2f, %06.2f, %06.2f,' % (acc_x, acc_y, acc_z),
+        ang_x, ang_y, ang_z = mpu.calc_angle(acc_x, acc_y, acc_z)
+        print '%07.2f, %07.2f, %07.2f' % (ang_x, ang_y, ang_z),
+        gyro_x, gyro_y, gyro_z = mpu.get_gyro_data_deg()
+        ro_x, ro_y, ro_z = mpu.calc_ro_speed(gyro_x, gyro_y, gyro_z)
+        print '%06.2f, %06.2f, %06.2f' % (ro_x, ro_y, ro_z),
+        print
 	sleep(0.1)

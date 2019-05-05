@@ -1,14 +1,19 @@
-import setup_gpio
 import RPi.GPIO as GPIO
 from time import sleep
 
-list = [
-    {"pin":12, "io": GPIO.IN}
-]
+class ML393:
+    __pin = 0
+    def __init__(self, pin):
+        self.__pin = pin
 
-setup_gpio.setup(list)
+    def read(self):
+        GPIO.setup(self.__pin, GPIO.IN)
+        return GPIO.input(self.__pin)
+
+
+ml = ML393(pin=12)
 while True:
-    if GPIO.input(12) == GPIO.LOW:
+    if ml.read() == GPIO.LOW:
         print("detected!!")
     sleep(0.2)
 

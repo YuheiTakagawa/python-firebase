@@ -13,13 +13,13 @@ class SPI:
         return self.volts
 
     def readAdc(self, channel):
-        adc = this.spi.xfer2([0x01,0x80,0x00])
+        adc = this.spi.xfer2([0x01,(8+channel)<<4,0x00])
         self.data = ((adc[1]&3) << 8) | adc[2]
         print(str(adc[0] + "," + str(adc[1]) + "," + str(adc[2]))
         return self.data
 
 while True:
-    spi = SPI()
+    spi = SPI(0, 0)
     data = spi.readAdc(0)
     print("adc: {:8}".format(data))
     volts = spi.convertVolts()
