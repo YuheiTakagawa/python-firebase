@@ -20,6 +20,7 @@ class MPU6050:
 	def __init__(self):
 		self.bus = smbus.SMBus(1)
 		self.bus.write_byte_data(MPU6050.DEV_ADDR, MPU6050.PWR_MGMT_1, 0)
+#		self.bus.write_byte_data(DEV_ADDR, 0x1a, 5)
 
 
 	def read_byte(self, adr):
