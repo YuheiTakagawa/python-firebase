@@ -36,7 +36,7 @@ pip install git+https://github.com/bsdz/micropyGPS.git
 - [GPS(AE-GYSFDMAXB)](/gps.py)
 - [衝突検出センサ(赤外線)(ML393 IR)](/irml393.py)
 - [サーボモータ(SG90)](/sarvo.py)
-- [人感センサ(HC-SR501)](/ch-sr501.py) (検討中)
+- [人感センサ(HC-SR501)](/chsr501.py) (検討中)
 
 ### 感圧センサに関して
 アナログ値・デジタル値のどちらかをとることができるよ  
