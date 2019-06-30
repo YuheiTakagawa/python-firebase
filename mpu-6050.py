@@ -166,11 +166,17 @@ while True:
 	
         mpu = MPU6050()
         acc_x, acc_y, acc_z = mpu.get_accel_data_g()
-        print '%06.2f, %06.2f, %06.2f,' % (acc_x, acc_y, acc_z),
+        #print '%06.2f, %06.2f, %06.2f,' % (acc_x, acc_y, acc_z),
         ang_x, ang_y, ang_z = mpu.calc_angle(acc_x, acc_y, acc_z)
-        print '%07.2f, %07.2f, %07.2f' % (ang_x, ang_y, ang_z),
-        gyro_x, gyro_y, gyro_z = mpu.get_gyro_data_deg()
-        ro_x, ro_y, ro_z = mpu.calc_ro_speed(gyro_x, gyro_y, gyro_z)
-        print '%06.2f, %06.2f, %06.2f' % (ro_x, ro_y, ro_z),
+        if ang_y >= 0 or ang_y < -100:
+            print '%3d' % (ang_z%360)
+        else:
+            print '%3d' % (-1*ang_z%360)
+#        print '%3d' % (math.atan2(acc_x,acc_y)*
+        print '%3d, %3d' % (ang_y,ang_z),
+        #print '%07.2f, %07.2f, %07.2f' % (ang_x, ang_y, ang_z),
+        #gyro_x, gyro_y, gyro_z = mpu.get_gyro_data_deg()
+        #ro_x, ro_y, ro_z = mpu.calc_ro_speed(gyro_x, gyro_y, gyro_z)
+        #print '%06.2f, %06.2f, %06.2f' % (ro_x, ro_y, ro_z),
         print
-	sleep(0.1)
+	sleep(1)

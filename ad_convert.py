@@ -4,18 +4,22 @@ import sys
 
 class SPI:
     def __init__(self, no, num):
-        this.spi = spidev.SpiDev()
-        this.spi.open(no, num)
+        self.spi = spidev.SpiDev()
+        self.spi.open(no, num)
 
     def convertVolts(self):
-        v = (this.data * 3.3) / float(1023)
+        v = (self.data * 3.3) / float(1023)
         self.volts = round(v, 4)
         return self.volts
 
     def readAdc(self, channel):
-        adc = this.spi.xfer2([0x01,(8+channel)<<4,0x00])
-        self.data = ((adc[1]&3) << 8) | adc[2]
-        print(str(adc[0] + "," + str(adc[1]) + "," + str(adc[2]))
+        spi = spidev.SpiDev()
+        spi.open(0,0)
+#        adc = self.spi.xfer2([0x01,(8+channel)<<4,0x00])
+        adc = spi.xfer2([0x68,0x00])    
+#        self.data = ((adc[0]&3) << 8) | adc[1]))
+        self.data = ((adc[0]<<8) + adc[1])&0x3ff
+        print(str(adc[0]) + "," + str(adc[1]))
         return self.data
 
 while True:

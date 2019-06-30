@@ -4,6 +4,7 @@ from time import sleep
 class ML393:
     __pin = 0
     def __init__(self, pin):
+        GPIO.setmode(GPIO.BCM)
         self.__pin = pin
 
     def read(self):
